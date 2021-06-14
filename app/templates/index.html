@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anime Poser</title>
+</head>
+
+<body>
+    <form method="post">
+        <h2>起始位置</h2>
+        <div>
+            <input type="range" id = "start_x"  name="start_x" min="-1" max="1" step="0.01">
+            <label for="start_x">x</label>
+            <input type="range" id = "start_y"  name="start_y" min="-1" max="1" step="0.01">
+            <label for="start_y">y</label>
+            <input type="range" id = "start_z"  name="start_z" min="-1" max="1" step="0.01">
+            <label for="start_z">z</label>
+        </div>
+        <div>
+            <input type="range" id = "start_left_eye"  name="start_left_eye" min="0" max="1" step="0.01">
+            <label for="start_left_eye">left eye</label>
+            <input type="range" id = "start_right_eye"  name="start_right_eye" min="0" max="1" step="0.01">
+            <label for="start_right_eye">right eye</label>
+            <input type="range" id = "start_mouth"  name="start_mouth" min="0" max="1" step="0.01">
+            <label for="start_mouth">mouth</label>
+        </div>
+
+
+        <h2>结束位置</h2>
+        <div>
+            <input type="range" id = "end_x"  name="end_x" min="-1" max="1" step="0.01">
+            <label for="end_x">x</label>
+            <input type="range" id = "end_y"  name="end_y" min="-1" max="1" step="0.01">
+            <label for="end_y">y</label>
+            <input type="range" id = "end_z"  name="end_z" min="-1" max="1" step="0.01">
+            <label for="end_z">z</label>
+        </div>
+        <div>
+            <input type="range" id = "end_left_eye"  name="end_left_eye" min="0" max="1" step="0.01">
+            <label for="end_left_eye">left eye</label>
+            <input type="range" id = "end_right_eye"  name="end_right_eye" min="0" max="1" step="0.01">
+            <label for="end_right_eye">right eye</label>
+            <input type="range" id = "end_mouth"  name="end_mouth" min="0" max="1" step="0.01">
+            <label for="end_mouth">mouth</label>
+        </div>
+        <div>
+            <input type="number" id = "total_frame_number" name = "total_frame_number" step="1" min="0" max="60">
+            <label for="total_frame_number">total frame number</label><br>
+            <input type="submit" name="">
+        </div>
+    </form>
+    <div class="panel-body">
+        <img src="{{ url_for('static', filename='img/result.gif') }}"/>
+    </div>
+</body>
+</html>

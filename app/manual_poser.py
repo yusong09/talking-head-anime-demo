@@ -29,7 +29,6 @@ class ManualPoserApp:
         self.current_pose = None
         self.last_pose = None
         self.count = 0
-        self.TOTAL_IMAGE: int = 39
 
     def load_image(self):
         file_name = "data/illust/waifu_00_256.png"
@@ -41,30 +40,34 @@ class ManualPoserApp:
                 print(message)
             self.source_image = extract_pytorch_image_from_filelike(file_name).to(self.torch_device).unsqueeze(dim=0)
 
-    def main_loop(self):
+    def main_loop(self, start_pose, end_pose, total_frame_num):
         self.load_image()
-        while self.count <= self.TOTAL_IMAGE:
-            self.update_image()
-            self.count += 1
-        get_gif("result/result", self.TOTAL_IMAGE, 0.5)
-
-    def update_pose(self):
+        step_size = []
+        for i in range(self.pose_size):
+            step_size.append((end_pose[i] - start_pose[i]) / total_frame_num)
         if self.current_pose is None:
             self.current_pose = torch.zeros(self.pose_size, device=self.torch_device)
+            for i in range(self.pose_size):
+                self.current_pose[i] = start_pose[i]
+        while self.count < total_frame_num:
+            self.update_image(step_size)
+            self.count += 1
+        generate_gif("app/static/img/result", total_frame_num, 0.5)
+
+    def update_pose(self, step_size):
         for i in range(self.pose_size):
-            self.current_pose[i] += 0.02
+            self.current_pose[i] += step_size[i]
         return self.current_pose.unsqueeze(dim=0)
 
-    def update_image(self):
-        self.update_pose()
-        posed_image = self.poser.pose(self.source_image, self.update_pose()).detach().cpu()
+    def update_image(self, step_size):
+        posed_image = self.poser.pose(self.source_image, self.update_pose(step_size)).detach().cpu()
         numpy_image = rgba_to_numpy_image(posed_image[0])
         pil_image = PIL.Image.fromarray(numpy.uint8(numpy.rint(numpy_image * 255.0)), mode='RGBA')
-        res_file = "result/result_%d.png" % self.count
+        res_file = "app/static/img/result_%d.png" % self.count
         pil_image.save(res_file)
 
 
-def get_gif(pics_dir, n, t=0.1):
+def generate_gif(pics_dir, n, t=0.1):
     imgs = []
     for i in range(n):
         pic_name = '{}_{}.png'.format(pics_dir, i)
